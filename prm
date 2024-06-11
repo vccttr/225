@@ -1,0 +1,51 @@
+using System;
+using System.Windows.Forms;
+
+namespace WindowsFormsApp
+{
+    static class Program
+    {
+        // Статические поля для хранения ссылок на формы
+        private static Form activeForm;
+
+        [STAThread]
+        static void Main()
+        {
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+
+            // Инициализация первой формы
+            Form1 form1 = new Form1();
+            form1.FormClosed += (sender, e) => CloseForm((Form)sender);
+            ShowForm(form1);
+
+            // Инициализация остальных форм аналогично
+            Form2 form2 = new Form2();
+            form2.FormClosed += (sender, e) => CloseForm((Form)sender);
+            ShowForm(form2);
+
+            // ... инициализация остальных форм
+
+            Application.Run();
+        }
+
+        private static void ShowForm(Form form)
+        {
+            if (activeForm != null)
+            {
+                activeForm.Hide();
+            }
+            form.Show();
+            activeForm = form;
+        }
+
+        private static void CloseForm(Form form)
+        {
+            if (form == activeForm)
+            {
+                activeForm = null;
+            }
+            form.Dispose();
+        }
+    }
+}
